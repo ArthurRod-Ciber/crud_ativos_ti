@@ -1,7 +1,8 @@
 from enums import TipoAtivo, Severidade,  Status
-from funcoes import exibir_menu, ler_opcao, ler_textos, exibir_tipos, exibir_ativo
+from funcoes import exibir_menu, ler_opcao, ler_textos, exibir_tipos, exibir_ativo, carregar_ativos, exibir_menu_atualizacao
 
 opcao = 0
+ativos = carregar_ativos()
 
 while opcao != 6:
     exibir_menu()
@@ -26,8 +27,7 @@ while opcao != 6:
         metodo = ler_opcao("\nComo deseja buscar?\n [1] ID\n [2] NOME\n", 1, 2)
         if metodo == 1:
             id_busca = ler_opcao("Digite o ID do ativo que pretende buscar: ", 1, 9999)
-            encontrado = False
-
+            
             with open("ativos.txt", "r") as arquivo:
                 for linha in arquivo:
                     campos = linha.strip().split("|")
@@ -53,4 +53,9 @@ while opcao != 6:
                 print("\nAtivo nao encontrado")
     
     elif opcao == 3:
-        
+        id_atualizacao = ler_opcao("Digite o ID do ativo que você deseja atualizar: ", 1, 9999)
+        if id_atualizacao in ativos:
+            exibir_menu_atualizacao()
+            atualizacao = ler_opcao("Digite o numero da opcão escolhida para ser atualizada: ", 1, 6)
+        else:
+            print("\nAtivo não encontrado!")

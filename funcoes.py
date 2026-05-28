@@ -65,4 +65,23 @@ def carregar_ativos():
     with open("ativos.txt", "r") as  arquivo:
         for linha in arquivo:
            campos = linha.strip().split("|")
-           ativos[id] = campos[0].strip
+           ativos[int(campos[0].strip())] = campos 
+        return ativos
+
+#funcao para exibir manu das atualizações
+
+def exibir_menu_atualizacao():
+    opcoes = [
+        "Nome",
+        "Responsavel",
+        "Setor",
+        "Tipo",
+        "Descrição"
+        "Canelar"
+
+    ]
+
+    print()
+    for i in opcoes in enumerate(opcoes, start=1):
+        print(f"[{i}] {opcoes}")
+        
