@@ -1,6 +1,6 @@
 #funcoes para organizar melhor o codigo
 
-from enums import TipoAtivo
+from enums import TipoAtivo, Severidade, Status
 import json
 
 #funcao para exibir o menu
@@ -71,7 +71,7 @@ def cadastrar(ativos):
 def gerar_id(ativos):
     if len(ativos) == 0: #conta quantos ativos tem na lista, se for 0 o arquivo esta vazio portanto o id começara em 1
         return 1
-    return max(ativo["id" for ativo in ativos]) +1    #percorre cada ativo da lista, pega o valor do campo id de cada um, encontra o maior id dentre todos, soma um ao maior id encontrado
+    return max(ativo["id"] for ativo in ativos) +1    #percorre cada ativo da lista, pega o valor do campo id de cada um, encontra o maior id dentre todos, soma um ao maior id encontrado
 
 
 #exibir submenu do tipo de ativos
@@ -122,7 +122,7 @@ def salvar_ativos(ativos):
 
 #funcao para buscar os ativos no json
 
-def busca(ativos):
+def buscar(ativos):
     print("\n--- BUSCAR ATIVO ---")
     metodo = ler_opcao("\ncomo deseja buscar?\n[1]ID\n[2]NOME\n", 1, 2)
     if metodo == 1:
@@ -210,4 +210,50 @@ def atualizar_ativo(ativos):
     
     salvar_ativos(ativos)
     print("\nAtivo atualizado com sucesso")
+
+#funcao para exibir severidades
+
+def exibir_severidades():
+    for severidade in Severidade:
+        print(f"[{severidade.value}] {severidade.name.replace("_", " ")}")
+
+#funcao para exibir opcoes de status
+
+def exibir_status():
+    for status in Status:
+        print(f"[{status.value}] {status.name.replace("_", " ")}")
+
+#salvar vulnerabilidades
+
+def salvar_vulnerabilidade(vulnerabilidades):
+    with open(ARQUIVO, "w") as arquivo:
+        json.dump(vulnerabilidades, arquivo, indent=4)
+    
+
+#funcao para cadastrar vulnerabilidades
+
+def cadastrar_vulnerabilidade(vulnerabilidades):
+    descricao = ler_textos("Digite a descrição da vulnerabilidade do ativo: ")
+    categoria = ler_textos("Digite qual a categoria da vulnerabilidade: ")
+    exibir_severidades() #mosta as opcoes de severidade
+    severidade_opcao = ler_opcao("Digite a opção referente a severidade: ", 1, 4)
+    severidade = Severidade(severidade_opcao)
+    exibir_status() #motra as opcoes de status
+    status_opcao= ler_opcao("Digite a opção referente ao status do ativo: ", 1, 4)
+    status = Status(status_opcao)
+
+    vulnerabilidade = {
+        "descrição": descricao,
+        "categoria": categoria,
+        "severidade": severidade.name,
+        "status": status.name,
+    }
+    vulnerabilidades.append(vulnerabilidade)
+    salvar_vulnerabilidade(vulnerabilidades)  #funcao que salva as vulnerabilidades em um json 
+    print(f"Vulnerabilidade cadastrada com sucesso!")
+
+
+
+
+
     
