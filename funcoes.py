@@ -14,8 +14,8 @@ def exibir_menu():
         "Sair\n"
     ]
     
-    for i, opcoes in enumerate(opcoes, start=1):
-        print(f"[{i}] {opcoes}")
+    for i, opcao in enumerate(opcoes, start=1):
+        print(f"[{i}] {opcao}")
 
 #funcao para ler a opcao
 
@@ -76,12 +76,21 @@ def exibir_menu_atualizacao():
         "Responsavel",
         "Setor",
         "Tipo",
-        "Descrição"
-        "Canelar"
-
+        "Descrição",
+        "Canelar",
     ]
-
     print()
-    for i in opcoes in enumerate(opcoes, start=1):
-        print(f"[{i}] {opcoes}")
+    for i, opcao in enumerate(opcoes, start=1):
+        print(f"[{i}] {opcao}")
         
+#funcao para atualziar o ativo:
+
+def atualizar_ativo(id_att, campo, novo_valor):
+    nome_att = ler_textos("Digite o novo nome do ativo: ")
+    with open("ativos.txt", "r") as arquivo:
+        linhas = arquivo.readlines
+    with open("ativos.txt", "w") as arquivo:
+        for linha in linhas:
+            campos = linha.strip().split("|")
+            if campos[1].strip() == nome_att:
+                arquivo.write(f"{campos[0]} | {nome_att} | {campos[2]} | {campos[3]} | {campos[4]}\n")
