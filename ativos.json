@@ -1,9 +1,18 @@
 [
     {
-        "id": 1,
-        "nome": "note arthur",
-        "responsavel": "note heitor",
+        "id": 2,
+        "nome": "Celular alanis",
+        "responsavel": "alanis",
         "setor": "ti",
-        "tipo": "NOTEBOOK"
+        "tipo": "ESTACAO_DE_TRABALHO",
+        "vulnerabilidades": [
+            {
+                "id": 2,
+                "descricao": "problema na tela",
+                "categoria": "defeito",
+                "severidade": "CRITICA",
+                "status": "ABERTA"
+            }
+        ]
     }
 ]

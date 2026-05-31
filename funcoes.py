@@ -59,7 +59,8 @@ def cadastrar(ativos):
         "nome": nome,
         "responsavel": responsavel,
         "setor": setor,
-        "tipo": tipo.name
+        "tipo": tipo.name,
+        "vulnerabilidades": []
     }
     ativos.append(ativo)
     salvar_ativos(ativos)
@@ -154,7 +155,7 @@ def deletar(ativos):
             exibir_ativo(ativo) #mostra ativo antes de deletar
             confirmacao = ler_opcao("Tem certeza?\n[1]SIM\n[2]NAO\n", 1, 2)
             if confirmacao == 1:
-                ativos.remove(ativos)
+                ativos.remove(ativo)
                 salvar_ativos(ativos) #salva no json
                 print("\nAtivo deletado!!")
             else:
@@ -211,6 +212,10 @@ def atualizar_ativo(ativos):
     salvar_ativos(ativos)
     print("\nAtivo atualizado com sucesso")
 
+#criação do arquivo de vulnerabilidades.json
+
+arquivo_vulnerabilidades = "vulnerabilidades.json"
+
 #funcao para exibir severidades
 
 def exibir_severidades():
@@ -226,34 +231,81 @@ def exibir_status():
 #salvar vulnerabilidades
 
 def salvar_vulnerabilidade(vulnerabilidades):
-    with open(ARQUIVO, "w") as arquivo:
+    with open("arquivo_vulnerabilidades", "w") as arquivo:
         json.dump(vulnerabilidades, arquivo, indent=4)
     
 
 #funcao para cadastrar vulnerabilidades
 
-def cadastrar_vulnerabilidade(vulnerabilidades):
-    descricao = ler_textos("Digite a descrição da vulnerabilidade do ativo: ")
-    categoria = ler_textos("Digite qual a categoria da vulnerabilidade: ")
-    exibir_severidades() #mosta as opcoes de severidade
-    severidade_opcao = ler_opcao("Digite a opção referente a severidade: ", 1, 4)
-    severidade = Severidade(severidade_opcao)
-    exibir_status() #motra as opcoes de status
-    status_opcao= ler_opcao("Digite a opção referente ao status do ativo: ", 1, 4)
-    status = Status(status_opcao)
+def cadastrar_vulnerabilidade(ativos):
+    print("\n--- CADATRAR VULNERABILIDADE ---")
+    id_ativo = ler_opcao("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ", 1, 9999)
+    
+    for ativo in ativos:
+        if ativo["id"] == id_ativo:
+            descricao = ler_textos("Digite a descrição da vulnerabilidade do ativo: ")
+            categoria = ler_textos("Digite qual a categoria da vulnerabilidade: ")
+            exibir_severidades() #mosta as opcoes de severidade
+            severidade_opcao = ler_opcao("Digite a opção referente a severidade: ", 1, 4)
+            severidade = Severidade(severidade_opcao)
+            exibir_status() #motra as opcoes de status
+            status_opcao= ler_opcao("Digite a opção referente ao status do ativo: ", 1, 4)
+            status = Status(status_opcao)
 
-    vulnerabilidade = {
-        "descrição": descricao,
-        "categoria": categoria,
-        "severidade": severidade.name,
-        "status": status.name,
-    }
-    vulnerabilidades.append(vulnerabilidade)
-    salvar_vulnerabilidade(vulnerabilidades)  #funcao que salva as vulnerabilidades em um json 
-    print(f"Vulnerabilidade cadastrada com sucesso!")
+            vulnerabilidade = {
+                "id": id_ativo,
+                "descricao": descricao,
+                "categoria": categoria,
+                "severidade": severidade.name,
+                "status": status.name,
+            }
+            ativo["vulnerabilidades"].append(vulnerabilidade)
+            salvar_ativos(ativos)
+            print("\nVulnerabilida cadastrada com sucesso!")
+            return
+    print("\nAtivo não encontrado")
 
+#funcao para exibir vulnerabilidade 
+def listar_vulnerabilidades(ativos):
+    print("\n--- VULNERABILIDADES ---")
+    id_ativo = ler_opcao("Digite o ID do ativo: ", 1, 9999)
 
+    for ativo in ativos:
+        if ativo["id"] == id_ativo:
+            if len(ativo["vulnerabilidades"]) == 0:
+                print("\nEste ativo não possui vulnerabilidades registradas.")
+                return
+            for vulnerabilidade in ativo["vulnerabilidades"]:
+                print(f"\nDescrição: {vulnerabilidade['descricao']}")
+                print(f"Categoria: {vulnerabilidade['categoria']}")
+                print(f"Severidade: {vulnerabilidade['severidade']}")
+                print(f"Status: {vulnerabilidade['status']}")
+                print("-" * 30)
+            return
+    print("\nAtivo não encontrado")            
 
+#funcao para exibir o menu de gerenciar as vulnerabilidades
 
+def exibir_menu_vulnerabilidades():
+    print("\n--- GERENCIAR VULNERABILIDADES ---")
+    opcoes = [
+        "Cadastrar Vulnerabilidades",
+        "Listar Vulnerabilidades",
+        "Voltar"
+    ]
+    for i, opcao in enumerate(opcoes, start=1):
+        print(f"[{i}] {opcao}")
 
     
+#funcao para gerenciar vulerabilidades
+
+def gerenciar_vulnerabilidades(ativos):
+    opcao_vul = 0
+    while opcao_vul != 3:
+        exibir_menu_vulnerabilidades()
+        opcao_vul = ler_opcao("Digite a opção que deseja realizar: ", 1, 3)
+        if opcao_vul == 1:
+            cadastrar_vulnerabilidade(ativos)
+        elif opcao_vul == 2:
+            listar_vulnerabilidades(ativos)
+        
