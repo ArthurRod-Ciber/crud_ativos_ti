@@ -14,5 +14,13 @@
                 "status": "ABERTA"
             }
         ]
+    },
+    {
+        "id": 3,
+        "nome": "Note arthur",
+        "responsavel": "wcomtec",
+        "setor": "ti",
+        "tipo": "BANCO_DE_DADOS",
+        "vulnerabilidades": []
     }
 ]

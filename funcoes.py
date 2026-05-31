@@ -3,8 +3,35 @@
 from enums import TipoAtivo, Severidade, Status
 import json
 
-#funcao para exibir o menu
+ARQUIVO = "ativos.json"
 
+# ==================== FUNÇÕES DE UTILIDADE ====================
+
+#funcao para ler opcoes numericas
+def ler_opcao(mensagem, minimo, maximo):
+    while True:
+        try:
+            opcao = int(input(mensagem))
+            if minimo <= opcao <= maximo:
+                return opcao
+            else:
+                print(f"\nTente novamente! Digite um numero entre {minimo} e {maximo}")
+        except ValueError:
+            print("\nResposta invalida, tente novamente!\n")
+            input("Pressione Enter para continuar")
+
+#funcao para ler estritamente textos
+def ler_textos(mensagem):
+    while True:
+        valor = input(mensagem)
+        if valor.strip() != "":
+            return valor
+        print("\nCampo não pode ser vazio, tente novamente!\n")
+
+
+# ==================== FUNÇÕES DE EXIBIÇÃO ====================
+
+#funcao para exibir o menu principal
 def exibir_menu():
     opcoes = [
         "Cadastrar ativo",
@@ -14,39 +41,86 @@ def exibir_menu():
         "Gerenciar vulnerabilidades",
         "Sair\n"
     ]
-    
     for i, opcao in enumerate(opcoes, start=1):
         print(f"[{i}] {opcao}")
 
-#funcao para ler a opcao
+#funcao para exibir o menu de atualizacao
+def exibir_menu_atualizacao():
+    opcoes = [
+        "Nome",
+        "Responsavel",
+        "Setor",
+        "Tipo",
+        "Cancelar",
+    ]
+    print()
+    for i, opcao in enumerate(opcoes, start=1):
+        print(f"[{i}] {opcao}")
 
-def ler_opcao(mensagem, minimo, maximo):
-    while True:
-        try:
-            opcao = int(input(mensagem))
-            if minimo <= opcao <= maximo:
-                return opcao
-            else:
-                print(f"\nTente novamente! digite um numero entre {minimo} {maximo}")
-        except ValueError:
-            print("\nResposta invalida, tente novamente!\n")
-            input("Pressione Enter para continuar")
+#funcao para exibir o menu de vulnerabilidades
+def exibir_menu_vulnerabilidades():
+    print("\n--- GERENCIAR VULNERABILIDADES ---")
+    opcoes = [
+        "Cadastrar Vulnerabilidade",
+        "Listar Vulnerabilidades",
+        "Voltar"
+    ]
+    for i, opcao in enumerate(opcoes, start=1):
+        print(f"[{i}] {opcao}")
 
-#funcao para ler estritamente textos
+#funcao para exibir os tipos de ativos
+def exibir_tipos():
+    for tipo in TipoAtivo:
+        print(f"[{tipo.value}] {tipo.name.replace('_', ' ')}")
 
-def ler_textos(mensagem):
-    while True:
-        valor = input(mensagem)
-        if valor.strip() != "":
-            return valor
-        print("\nCampo não pode ser vazio, tente novamente!\n")
+#funcao para exibir as severidades
+def exibir_severidades():
+    for severidade in Severidade:
+        print(f"[{severidade.value}] {severidade.name.replace('_', ' ')}")
+
+#funcao para exibir os status
+def exibir_status():
+    for status in Status:
+        print(f"[{status.value}] {status.name.replace('_', ' ')}")
+
+#funcao para exibir os dados de um ativo
+def exibir_ativo(ativo):
+    print(f"\nID: {ativo['id']}")
+    print(f"Nome: {ativo['nome']}")
+    print(f"Responsavel: {ativo['responsavel']}")
+    print(f"Setor: {ativo['setor']}")
+    print(f"Tipo: {ativo['tipo'].replace('_', ' ')}")
+    print()
 
 
-#funcao para cadastrar ativos
+# ==================== FUNÇÕES DE ARQUIVO ====================
 
+#funcao para carregar os ativos do json
+def carregar_ativos():
+    try:
+        with open(ARQUIVO, "r") as arquivo:
+            return json.load(arquivo)
+    except FileNotFoundError:
+        return []
+
+#funcao para salvar os ativos no json
+def salvar_ativos(ativos):
+    with open(ARQUIVO, "w") as arquivo:
+        json.dump(ativos, arquivo, indent=4)
+
+
+# ==================== FUNÇÕES DE ATIVOS ====================
+
+#funcao para gerar um id automaticamente
+def gerar_id(ativos):
+    if len(ativos) == 0:
+        return 1
+    return max(ativo["id"] for ativo in ativos) + 1
+
+#funcao para cadastrar um ativo
 def cadastrar(ativos):
     print("\n--- CADASTRAR ATIVO ---")
-    id = gerar_id(ativos) #gera um id automaticamente 
+    id = gerar_id(ativos)
     nome = ler_textos("Digite o nome do ativo: ")
     responsavel = ler_textos("Digite o responsavel pelo ativo: ")
     setor = ler_textos("Qual setor do ativo? ")
@@ -64,123 +138,41 @@ def cadastrar(ativos):
     }
     ativos.append(ativo)
     salvar_ativos(ativos)
-    print(f"\nAtivo cadastrado com sucedo! ID gerado: {id}")
+    print(f"\nAtivo cadastrado com sucesso! ID gerado: {id}")
 
-
-#funcao para gerar um id
-
-def gerar_id(ativos):
-    if len(ativos) == 0: #conta quantos ativos tem na lista, se for 0 o arquivo esta vazio portanto o id começara em 1
-        return 1
-    return max(ativo["id"] for ativo in ativos) +1    #percorre cada ativo da lista, pega o valor do campo id de cada um, encontra o maior id dentre todos, soma um ao maior id encontrado
-
-
-#exibir submenu do tipo de ativos
-
-def exibir_tipos():
-    for tipo in TipoAtivo:
-        print(f"[{tipo.value}] {tipo.name.replace("_", " ")}")
-
-
-#funcao para exibir o ativo
-
-def exibir_ativo(ativo):
-    print(f"\nID: {ativo['id']}")
-    print(f"Nome: {ativo['nome']}")
-    print(f"Responsavel: {ativo['responsavel']}")
-    print(f"Setor: {ativo['setor']}")
-    print(f"Tipo: {ativo['tipo']}")
-    print() 
-
-#funcao para listar ativos
-
-
+#funcao para listar todos os ativos
 def listar_ativos(ativos):
-    print(f"\n--- LISTA DE ATIVOS ---")
-    if len(ativos) == 0: #verifica se a lista ta vazia
-        print("Nenhum ativo encontrado")
-        return #encerra tudo se nao tiver nada pra mostrar 
-    for ativo in ativos: #percorre cada ativo da lista
-        exibir_ativo(ativo) #chama uma funcao ja existente para exibir dos dados
+    print("\n--- LISTA DE ATIVOS ---")
+    if len(ativos) == 0:
+        print("Nenhum ativo encontrado.")
+        return
+    for ativo in ativos:
+        exibir_ativo(ativo)
 
-
-#funcao para carregar os ativos no json
-ARQUIVO = "ativos.json"
-
-def carregar_ativos():
-    try:
-        with open(ARQUIVO, "r") as arquivo:
-            return json.load(arquivo)
-    except FileNotFoundError:
-        return []
-
-#funcao para salvar os ativos:
-
-def salvar_ativos(ativos):
-    with open(ARQUIVO, "w") as arquivo:
-        json.dump(ativos, arquivo, indent=4)
-
-
-#funcao para buscar os ativos no json
-
+#funcao para buscar ativos
 def buscar(ativos):
     print("\n--- BUSCAR ATIVO ---")
-    metodo = ler_opcao("\ncomo deseja buscar?\n[1]ID\n[2]NOME\n", 1, 2)
+    metodo = ler_opcao("\nComo deseja buscar?\n[1] ID\n[2] NOME\n", 1, 2)
+
     if metodo == 1:
         id_busca = ler_opcao("Digite o ID do ativo: ", 1, 9999)
         for ativo in ativos:
             if ativo["id"] == id_busca:
                 exibir_ativo(ativo)
-                return #encerra na hora assim que encontrar
-        print("\nAtivo nao encontrado")
+                return
+        print("\nAtivo não encontrado.")
 
     elif metodo == 2:
         nome_busca = ler_textos("Digite o nome do ativo: ")
         encontrado = False
         for ativo in ativos:
-            if ativo["nome"].lower == nome_busca.loer():
+            if ativo["nome"].lower() == nome_busca.lower():
                 exibir_ativo(ativo)
                 encontrado = True
         if not encontrado:
-            print(f"\nAtivo não encontrado")
+            print("\nAtivo não encontrado.")
 
-#funcao para deletar ativos
-
-def deletar(ativos):
-    print("\n--- DELETAR ATIVO ---")
-    id_deletar = ler_opcao("Digite o ID do ativo que deseja deletar: ", 1, 9999)
-
-    for ativo in ativos:
-        if ativo["id"] == id_deletar: #busca o ativo pelo id
-            exibir_ativo(ativo) #mostra ativo antes de deletar
-            confirmacao = ler_opcao("Tem certeza?\n[1]SIM\n[2]NAO\n", 1, 2)
-            if confirmacao == 1:
-                ativos.remove(ativo)
-                salvar_ativos(ativos) #salva no json
-                print("\nAtivo deletado!!")
-            else:
-                print("\nOperação cancelada")
-            return
-    print("\nAtivo nao encontrado")
-
-
-#funcao para exibir manu das atualizações
-
-def exibir_menu_atualizacao():
-    opcoes = [
-        "Nome",
-        "Responsavel",
-        "Setor",
-        "Tipo",
-        "Descrição",
-        "Canelar",
-    ]
-    print()
-    for i, opcao in enumerate(opcoes, start=1):
-        print(f"[{i}] {opcao}")
-        
-#funcao para atualziar o ativo:
-
+#funcao para atualizar um ativo
 def atualizar_ativo(ativos):
     print("\n--- ATUALIZAR ATIVO ---")
     id_att = ler_opcao("Digite o ID do ativo que você deseja atualizar: ", 1, 9999)
@@ -190,70 +182,67 @@ def atualizar_ativo(ativos):
             exibir_ativo(ativo)
             break
     else:
-        print("ID não encontrado")
+        print("\nID não encontrado.")
         return
-    
+
     exibir_menu_atualizacao()
-    opcao = ler_opcao("Digite o que deseja realizar: ", 1, 5)
+    opcao = ler_opcao("Digite o que deseja atualizar: ", 1, 5)
 
     if opcao == 1:
-        ativo["nome"]  = ler_textos("Digite um novo nome: ")
+        ativo["nome"] = ler_textos("Digite o novo nome: ")
     elif opcao == 2:
-        ativo["responsavel"] = ler_textos("Digite o novo novo responsavel para ela: ")
+        ativo["responsavel"] = ler_textos("Digite o novo responsavel: ")
     elif opcao == 3:
-        ativo["setor"] = ler_textos("Qual o novo setor do ativo°? ") 
+        ativo["setor"] = ler_textos("Qual o novo setor do ativo? ")
     elif opcao == 4:
-        tipo_opcao = ler_opcao("Digite um niovo tipo: ", 1, 8)
+        exibir_tipos()
+        tipo_opcao = ler_opcao("Digite o novo tipo: ", 1, 8)
         ativo["tipo"] = TipoAtivo(tipo_opcao).name
     elif opcao == 5:
-        print("\nOperação cancelada")
+        print("\nOperação cancelada.")
         return
-    
+
     salvar_ativos(ativos)
-    print("\nAtivo atualizado com sucesso")
+    print("\nAtivo atualizado com sucesso!")
 
-#criação do arquivo de vulnerabilidades.json
+#funcao para deletar um ativo
+def deletar(ativos):
+    print("\n--- DELETAR ATIVO ---")
+    id_deletar = ler_opcao("Digite o ID do ativo que deseja deletar: ", 1, 9999)
 
-arquivo_vulnerabilidades = "vulnerabilidades.json"
+    for ativo in ativos:
+        if ativo["id"] == id_deletar:
+            exibir_ativo(ativo)
+            confirmacao = ler_opcao("Tem certeza?\n[1] SIM\n[2] NAO\n", 1, 2)
+            if confirmacao == 1:
+                ativos.remove(ativo)
+                salvar_ativos(ativos)
+                print("\nAtivo deletado com sucesso!")
+            else:
+                print("\nOperação cancelada.")
+            return
+    print("\nAtivo não encontrado.")
 
-#funcao para exibir severidades
 
-def exibir_severidades():
-    for severidade in Severidade:
-        print(f"[{severidade.value}] {severidade.name.replace("_", " ")}")
+# ==================== FUNÇÕES DE VULNERABILIDADES ====================
 
-#funcao para exibir opcoes de status
-
-def exibir_status():
-    for status in Status:
-        print(f"[{status.value}] {status.name.replace("_", " ")}")
-
-#salvar vulnerabilidades
-
-def salvar_vulnerabilidade(vulnerabilidades):
-    with open("arquivo_vulnerabilidades", "w") as arquivo:
-        json.dump(vulnerabilidades, arquivo, indent=4)
-    
-
-#funcao para cadastrar vulnerabilidades
-
+#funcao para cadastrar uma vulnerabilidade
 def cadastrar_vulnerabilidade(ativos):
-    print("\n--- CADATRAR VULNERABILIDADE ---")
+    print("\n--- CADASTRAR VULNERABILIDADE ---")
     id_ativo = ler_opcao("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ", 1, 9999)
-    
+
     for ativo in ativos:
         if ativo["id"] == id_ativo:
-            descricao = ler_textos("Digite a descrição da vulnerabilidade do ativo: ")
-            categoria = ler_textos("Digite qual a categoria da vulnerabilidade: ")
-            exibir_severidades() #mosta as opcoes de severidade
-            severidade_opcao = ler_opcao("Digite a opção referente a severidade: ", 1, 4)
+            descricao = ler_textos("Digite a descrição da vulnerabilidade: ")
+            categoria = ler_textos("Digite a categoria da vulnerabilidade: ")
+            exibir_severidades()
+            severidade_opcao = ler_opcao("Digite a severidade: ", 1, 4)
             severidade = Severidade(severidade_opcao)
-            exibir_status() #motra as opcoes de status
-            status_opcao= ler_opcao("Digite a opção referente ao status do ativo: ", 1, 4)
+            exibir_status()
+            status_opcao = ler_opcao("Digite o status: ", 1, 4)
             status = Status(status_opcao)
 
             vulnerabilidade = {
-                "id": id_ativo,
                 "descricao": descricao,
                 "categoria": categoria,
                 "severidade": severidade.name,
@@ -261,11 +250,11 @@ def cadastrar_vulnerabilidade(ativos):
             }
             ativo["vulnerabilidades"].append(vulnerabilidade)
             salvar_ativos(ativos)
-            print("\nVulnerabilida cadastrada com sucesso!")
+            print("\nVulnerabilidade cadastrada com sucesso!")
             return
-    print("\nAtivo não encontrado")
+    print("\nAtivo não encontrado.")
 
-#funcao para exibir vulnerabilidade 
+#funcao para listar vulnerabilidades de um ativo
 def listar_vulnerabilidades(ativos):
     print("\n--- VULNERABILIDADES ---")
     id_ativo = ler_opcao("Digite o ID do ativo: ", 1, 9999)
@@ -282,23 +271,9 @@ def listar_vulnerabilidades(ativos):
                 print(f"Status: {vulnerabilidade['status']}")
                 print("-" * 30)
             return
-    print("\nAtivo não encontrado")            
+    print("\nAtivo não encontrado.")
 
-#funcao para exibir o menu de gerenciar as vulnerabilidades
-
-def exibir_menu_vulnerabilidades():
-    print("\n--- GERENCIAR VULNERABILIDADES ---")
-    opcoes = [
-        "Cadastrar Vulnerabilidades",
-        "Listar Vulnerabilidades",
-        "Voltar"
-    ]
-    for i, opcao in enumerate(opcoes, start=1):
-        print(f"[{i}] {opcao}")
-
-    
-#funcao para gerenciar vulerabilidades
-
+#funcao para gerenciar vulnerabilidades
 def gerenciar_vulnerabilidades(ativos):
     opcao_vul = 0
     while opcao_vul != 3:
@@ -308,4 +283,3 @@ def gerenciar_vulnerabilidades(ativos):
             cadastrar_vulnerabilidade(ativos)
         elif opcao_vul == 2:
             listar_vulnerabilidades(ativos)
-        
