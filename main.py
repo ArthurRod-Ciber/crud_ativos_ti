@@ -1,5 +1,9 @@
 from enums import TipoAtivo, Severidade,  Status
-from funcoes import exibir_menu, ler_opcao, carregar_ativos, cadastrar, deletar, atualizar_ativo, buscar, gerenciar_vulnerabilidades
+from utilidades import ler_opcao
+from exibicao import exibir_menu
+from arquivo import carregar_ativos
+from equipamento import cadastrar, deletar, atualizar_ativo, buscar
+from vulnerabilidade import gerenciar_vulnerabilidades
 
 opcao = 0
 ativos = carregar_ativos()
@@ -18,6 +22,3 @@ while opcao != 6:
         deletar(ativos) #funcao para fazer a remoção de um ativo diretamente no arquivo.json
     elif opcao == 5:
         gerenciar_vulnerabilidades(ativos) #funcao que abre o submenu para gerenciar vulnerabilidades e todas as funcoes sobre as vulnerabilidades, como cadastrar, listar etc
-        
-
-
