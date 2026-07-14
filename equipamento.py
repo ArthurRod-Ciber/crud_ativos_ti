@@ -1,7 +1,6 @@
 from enums import TipoAtivo
 from utilidades import ler_opcao, ler_textos
 from exibicao import exibir_tipos, exibir_ativo, exibir_menu_atualizacao
-from arquivo import salvar_ativos
 from entidade import EntidadeBase
 from vulnerabilidade import Vulnerabilidade
 
@@ -29,11 +28,11 @@ class Equipamentos(EntidadeBase):
     
     @classmethod
     def criar_a_partir_de_dict(cls, dados):
-       novo_equipamento = cls(dados["id"], dados["nome"], dados["responsavel"], dados["tipo"], dados["setor"])
-       for vulnerabilidade_dict in dados["vulnerabilidades"]:
-           vulnerabilidade_objeto = Vulnerabilidade.criar_a_partir_de_dict(vulnerabilidade_dict)
-           novo_equipamento.adicionar_vulnerabilidade(vulnerabilidade_objeto)
-           return novo_equipamento
+        novo_equipamento = cls(dados["id"], dados["nome"], dados["responsavel"], dados["tipo"], dados["setor"])
+        for vulnerabilidade_dict in dados["vulnerabilidades"]:
+            vulnerabilidade_objeto = Vulnerabilidade.criar_a_partir_de_dict(vulnerabilidade_dict)
+            novo_equipamento.adicionar_vulnerabilidade(vulnerabilidade_objeto)
+        return novo_equipamento
 
     
 
@@ -48,6 +47,7 @@ def gerar_id(ativos):
 #funcao para cadastrar um ativo
 def cadastrar(ativos):
     print("\n--- CADASTRAR ATIVO ---")
+    from arquivo import salvar_ativos
     id = gerar_id(ativos)
     nome = ler_textos("Digite o nome do ativo: ")
     responsavel = ler_textos("Digite o responsavel pelo ativo: ")
@@ -96,6 +96,7 @@ def buscar(ativos):
 #funcao para atualizar um ativo
 def atualizar_ativo(ativos):
     print("\n--- ATUALIZAR ATIVO ---")
+    from arquivo import salvar_ativos
     id_att = ler_opcao("Digite o ID do ativo que você deseja atualizar: ", 1, 9999)
 
     for ativo in ativos:
@@ -129,6 +130,7 @@ def atualizar_ativo(ativos):
 #funcao para deletar um ativo
 def deletar(ativos):
     print("\n--- DELETAR ATIVO ---")
+    from arquivo import salvar_ativos
     id_deletar = ler_opcao("Digite o ID do ativo que deseja deletar: ", 1, 9999)
 
     for ativo in ativos:

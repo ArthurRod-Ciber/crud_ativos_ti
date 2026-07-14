@@ -1,13 +1,13 @@
 from enums import TipoAtivo, Severidade,  Status
 from utilidades import ler_opcao
 from exibicao import exibir_menu
-from arquivo import carregar_ativos
 from equipamento import cadastrar, deletar, atualizar_ativo, buscar
 from vulnerabilidade import gerenciar_vulnerabilidades
 from arquivo import carregar_ativos
  
 opcao = 0
 ativos = carregar_ativos()
+print(ativos)
 
 while opcao != 6:
     exibir_menu()

@@ -4,7 +4,6 @@
 from enums import Severidade, Status
 from utilidades import ler_opcao, ler_textos
 from exibicao import exibir_severidades, exibir_status, exibir_menu_vulnerabilidades
-from arquivo import salvar_ativos
 from entidade import EntidadeBase
 
 class Vulnerabilidade(EntidadeBase):
@@ -31,6 +30,7 @@ class Vulnerabilidade(EntidadeBase):
 # funcao para cadastrar uma vulnerabilidade
 def cadastrar_vulnerabilidade(ativos):
     print("\n--- CADASTRAR VULNERABILIDADE ---")
+    from arquivo import salvar_ativos
     id_ativo = ler_opcao("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ", 1, 9999)
 
     for ativo in ativos:

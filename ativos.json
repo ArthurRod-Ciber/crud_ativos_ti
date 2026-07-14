@@ -3,8 +3,8 @@
         "id": 2,
         "nome": "Celular alanis",
         "responsavel": "alanis",
-        "setor": "ti",
         "tipo": "ESTACAO_DE_TRABALHO",
+        "setor": "ti",
         "vulnerabilidades": [
             {
                 "id": 2,
@@ -19,16 +19,32 @@
         "id": 3,
         "nome": "Note arthur",
         "responsavel": "wcomtec",
-        "setor": "ti",
         "tipo": "BANCO_DE_DADOS",
+        "setor": "ti",
         "vulnerabilidades": []
     },
     {
         "id": 4,
         "nome": "cell arthur",
         "responsavel": "arthur",
-        "setor": "ti",
         "tipo": "NOTEBOOK",
+        "setor": "ti",
         "vulnerabilidades": []
+    },
+    {
+        "id": 5,
+        "nome": "cell arthur",
+        "responsavel": "arthur",
+        "tipo": "NOTEBOOK",
+        "setor": "ti",
+        "vulnerabilidades": [
+            {
+                "id": 5,
+                "descricao": "tela dando pau",
+                "categoria": "tela",
+                "severidade": "ALTA",
+                "status": "ABERTA"
+            }
+        ]
     }
 ]
