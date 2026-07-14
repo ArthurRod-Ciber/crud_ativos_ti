@@ -23,6 +23,9 @@ class Equipamentos(EntidadeBase):
         dictbase["vulnerabilidades"] = [vulnerabilidade.transformar_em_dict() for vulnerabilidade in self.vulnerabilidades]
         return dictbase
     
+    def adicionar_vulnerabilidade(self, vulnerabilidade):
+        self.vulnerabilidades.append(vulnerabilidade)
+    
 
 
 
@@ -31,7 +34,7 @@ class Equipamentos(EntidadeBase):
 def gerar_id(ativos):
     if len(ativos) == 0:
         return 1
-    return max(ativo["id"] for ativo in ativos) + 1
+    return max(ativo.id for ativo in ativos) + 1
 
 #funcao para cadastrar um ativo
 def cadastrar(ativos):
@@ -44,15 +47,8 @@ def cadastrar(ativos):
     tipo_opcao = ler_opcao("Digite o tipo de ativo: ", 1, 8)
     tipo = TipoAtivo(tipo_opcao)
 
-    ativo = {
-        "id": id,
-        "nome": nome,
-        "responsavel": responsavel,
-        "setor": setor,
-        "tipo": tipo.name,
-        "vulnerabilidades": []
-    }
-    ativos.append(ativo)
+    novo_ativo = Equipamentos(id, nome, responsavel, tipo.name, setor)
+    ativos.append(novo_ativo)
     salvar_ativos(ativos)
     print(f"\nAtivo cadastrado com sucesso! ID gerado: {id}")
 
@@ -73,7 +69,7 @@ def buscar(ativos):
     if metodo == 1:
         id_busca = ler_opcao("Digite o ID do ativo: ", 1, 9999)
         for ativo in ativos:
-            if ativo["id"] == id_busca:
+            if ativo.id == id_busca:
                 exibir_ativo(ativo)
                 return
         print("\nAtivo não encontrado.")
@@ -82,7 +78,7 @@ def buscar(ativos):
         nome_busca = ler_textos("Digite o nome do ativo: ")
         encontrado = False
         for ativo in ativos:
-            if ativo["nome"].lower() == nome_busca.lower():
+            if ativo.nome.lower() == nome_busca.lower():
                 exibir_ativo(ativo)
                 encontrado = True
         if not encontrado:
@@ -94,7 +90,7 @@ def atualizar_ativo(ativos):
     id_att = ler_opcao("Digite o ID do ativo que você deseja atualizar: ", 1, 9999)
 
     for ativo in ativos:
-        if ativo["id"] == id_att:
+        if ativo.id == id_att:
             exibir_ativo(ativo)
             break
     else:
@@ -105,15 +101,15 @@ def atualizar_ativo(ativos):
     opcao = ler_opcao("Digite o que deseja atualizar: ", 1, 5)
 
     if opcao == 1:
-        ativo["nome"] = ler_textos("Digite o novo nome: ")
+        ativo.nome = ler_textos("Digite o novo nome: ")
     elif opcao == 2:
-        ativo["responsavel"] = ler_textos("Digite o novo responsavel: ")
+        ativo.responsavel = ler_textos("Digite o novo responsavel: ")
     elif opcao == 3:
-        ativo["setor"] = ler_textos("Qual o novo setor do ativo? ")
+        ativo.setor = ler_textos("Qual o novo setor do ativo? ")
     elif opcao == 4:
         exibir_tipos()
         tipo_opcao = ler_opcao("Digite o novo tipo: ", 1, 8)
-        ativo["tipo"] = TipoAtivo(tipo_opcao).name
+        ativo.tipo = TipoAtivo(tipo_opcao).name
     elif opcao == 5:
         print("\nOperação cancelada.")
         return
@@ -127,7 +123,7 @@ def deletar(ativos):
     id_deletar = ler_opcao("Digite o ID do ativo que deseja deletar: ", 1, 9999)
 
     for ativo in ativos:
-        if ativo["id"] == id_deletar:
+        if ativo.id == id_deletar:
             exibir_ativo(ativo)
             confirmacao = ler_opcao("Tem certeza?\n[1] SIM\n[2] NAO\n", 1, 2)
             if confirmacao == 1:

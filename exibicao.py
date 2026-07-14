@@ -21,8 +21,7 @@ def exibir_menu_atualizacao():
         "Responsavel",
         "Setor",
         "Tipo",
-        "Descrição",
-        "Canelar",
+        "Cancelar",
     ]
     print()
     for i, opcao in enumerate(opcoes, start=1):
@@ -56,9 +55,9 @@ def exibir_status():
 
 #funcao para exibir o ativo
 def exibir_ativo(ativo):
-    print(f"\nID: {ativo['id']}")
-    print(f"Nome: {ativo['nome']}")
-    print(f"Responsavel: {ativo['responsavel']}")
-    print(f"Setor: {ativo['setor']}")
-    print(f"Tipo: {ativo['tipo'].replace('_', ' ')}")
+    print(f"\nID: {ativo.id}")
+    print(f"Nome: {ativo.nome}")
+    print(f"Responsavel: {ativo.responsavel}")
+    print(f"Setor: {ativo.setor}")
+    print(f"Tipo: {ativo.tipo.replace('_', ' ')}")
     print()

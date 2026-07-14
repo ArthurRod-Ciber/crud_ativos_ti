@@ -30,7 +30,7 @@ def cadastrar_vulnerabilidade(ativos):
     id_ativo = ler_opcao("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ", 1, 9999)
 
     for ativo in ativos:
-        if ativo["id"] == id_ativo:
+        if ativo.id == id_ativo:
             descricao = ler_textos("Digite a descrição da vulnerabilidade: ")
             categoria = ler_textos("Digite a categoria da vulnerabilidade: ")
 
@@ -42,14 +42,8 @@ def cadastrar_vulnerabilidade(ativos):
             status_opcao = ler_opcao("Digite o status: ", 1, 4)
             status = Status(status_opcao)
 
-            vulnerabilidade = {
-                "descricao": descricao,
-                "categoria": categoria,
-                "severidade": severidade.name,
-                "status": status.name,
-            }
-
-            ativo["vulnerabilidades"].append(vulnerabilidade)
+            nova_vulnerabilidade = Vulnerabilidade(id, descricao, categoria, severidade.name, status.name)
+            ativo.vulnerabilidades.append(nova_vulnerabilidade)
             salvar_ativos(ativos)
             print("\nVulnerabilidade cadastrada com sucesso!")
             return
