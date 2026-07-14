@@ -3,6 +3,7 @@ from utilidades import ler_opcao, ler_textos
 from exibicao import exibir_tipos, exibir_ativo, exibir_menu_atualizacao
 from arquivo import salvar_ativos
 from entidade import EntidadeBase
+from vulnerabilidade import Vulnerabilidade
 
 class Equipamentos(EntidadeBase):
     def __init__(self, id, nome, responsavel, tipo, setor):
@@ -26,7 +27,15 @@ class Equipamentos(EntidadeBase):
     def adicionar_vulnerabilidade(self, vulnerabilidade):
         self.vulnerabilidades.append(vulnerabilidade)
     
+    @classmethod
+    def criar_a_partir_de_dict(cls, dados):
+       novo_equipamento = cls(dados["id"], dados["nome"], dados["responsavel"], dados["tipo"], dados["setor"])
+       for vulnerabilidade_dict in dados["vulnerabilidades"]:
+           vulnerabilidade_objeto = Vulnerabilidade.criar_a_partir_de_dict(vulnerabilidade_dict)
+           novo_equipamento.adicionar_vulnerabilidade(vulnerabilidade_objeto)
+           return novo_equipamento
 
+    
 
 
 

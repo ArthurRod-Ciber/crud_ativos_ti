@@ -22,6 +22,10 @@ class Vulnerabilidade(EntidadeBase):
         dictbase["severidade"] = self.severidade
         dictbase["status"] = self.status
         return dictbase
+    
+    @classmethod
+    def criar_a_partir_de_dict(cls, dados):
+        return cls(dados["id"], dados["descricao"], dados["categoria"], dados["severidade"], dados["status"] )
 
 
 # funcao para cadastrar uma vulnerabilidade
@@ -42,8 +46,8 @@ def cadastrar_vulnerabilidade(ativos):
             status_opcao = ler_opcao("Digite o status: ", 1, 4)
             status = Status(status_opcao)
 
-            nova_vulnerabilidade = Vulnerabilidade(id, descricao, categoria, severidade.name, status.name)
-            ativo.vulnerabilidades.append(nova_vulnerabilidade)
+            nova_vulnerabilidade = Vulnerabilidade(ativo.id, descricao, categoria, severidade.name, status.name)
+            ativo.adicionar_vulnerabilidade(nova_vulnerabilidade)
             salvar_ativos(ativos)
             print("\nVulnerabilidade cadastrada com sucesso!")
             return
@@ -57,15 +61,15 @@ def listar_vulnerabilidades(ativos):
     id_ativo = ler_opcao("Digite o ID do ativo: ", 1, 9999)
 
     for ativo in ativos:
-        if ativo["id"] == id_ativo:
-            if len(ativo["vulnerabilidades"]) == 0:
+        if ativo.id == id_ativo:
+            if len(ativo.vulnerabilidades) == 0:
                 print("\nEste ativo não possui vulnerabilidades registradas.")
                 return
-            for vulnerabilidade in ativo["vulnerabilidades"]:
-                print(f"\nDescrição: {vulnerabilidade['descricao']}")
-                print(f"Categoria: {vulnerabilidade['categoria']}")
-                print(f"Severidade: {vulnerabilidade['severidade']}")
-                print(f"Status: {vulnerabilidade['status']}")
+            for vulnerabilidade in ativo.vulnerabilidades:
+                print(f"\nDescrição: {vulnerabilidade.descricao}")
+                print(f"Categoria: {vulnerabilidade.categoria}")
+                print(f"Severidade: {vulnerabilidade.severidade}")
+                print(f"Status: {vulnerabilidade.status}")
                 print("-" * 30)
             return
 
