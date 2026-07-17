@@ -7,12 +7,22 @@ from vulnerabilidade import Vulnerabilidade
 class Equipamentos(EntidadeBase):
     def __init__(self, id, nome, responsavel, tipo, setor):
         super().__init__(id)
-        self.nome = nome 
+        self.__nome = nome 
         self.responsavel = responsavel
         self.tipo = tipo
         self.setor = setor
         self.vulnerabilidades = []
-        
+
+    @property
+    def nome(self):
+        return self.__nome
+    
+    @nome.setter
+    def nome(self, novo_nome):
+        if novo_nome and novo_nome.strip():
+            self.__nome = novo_nome
+        else:
+            raise ValueError("O nome não pode ser vazio!")
 
     def transformar_em_dict(self):
         dictbase = super().transformar_em_dict()

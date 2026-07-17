@@ -5,29 +5,13 @@
         "responsavel": "alanis",
         "tipo": "ESTACAO_DE_TRABALHO",
         "setor": "ti",
-        "vulnerabilidades": [
-            {
-                "id": 2,
-                "descricao": "problema na tela",
-                "categoria": "defeito",
-                "severidade": "CRITICA",
-                "status": "ABERTA"
-            }
-        ]
+        "vulnerabilidades": []
     },
     {
         "id": 3,
         "nome": "Note arthur",
         "responsavel": "wcomtec",
         "tipo": "BANCO_DE_DADOS",
-        "setor": "ti",
-        "vulnerabilidades": []
-    },
-    {
-        "id": 4,
-        "nome": "cell arthur",
-        "responsavel": "arthur",
-        "tipo": "NOTEBOOK",
         "setor": "ti",
         "vulnerabilidades": []
     },

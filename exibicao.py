@@ -7,6 +7,7 @@ def exibir_menu():
         "Cadastrar ativo",
         "Buscar ativo",
         "Atualizar ativo",
+        "Listar ativo",
         "Deletar ativo",
         "Gerenciar vulnerabilidades",
         "Sair\n"
@@ -33,6 +34,7 @@ def exibir_menu_vulnerabilidades():
     opcoes = [
         "Cadastrar Vulnerabilidades",
         "Listar Vulnerabilidades",
+        "Deletar Vulnerabilidades",
         "Voltar"
     ]
     for i, opcao in enumerate(opcoes, start=1):

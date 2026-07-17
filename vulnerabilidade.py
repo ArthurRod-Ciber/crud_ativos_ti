@@ -81,8 +81,42 @@ def gerenciar_vulnerabilidades(ativos):
     opcao_vul = 0
     while opcao_vul != 3:
         exibir_menu_vulnerabilidades()
-        opcao_vul = ler_opcao("Digite a opção que deseja realizar: ", 1, 3)
+        opcao_vul = ler_opcao("Digite a opção que deseja realizar: ", 1, 4)
         if opcao_vul == 1:
             cadastrar_vulnerabilidade(ativos)
         elif opcao_vul == 2:
             listar_vulnerabilidades(ativos)
+        elif opcao_vul == 3:
+            deletar_vulnerabilidade(ativos)
+
+#funcao para deletar vulnerabilidades
+def deletar_vulnerabilidade(ativos):
+    print("\n--- DELETAR VULNERABILIDADE ---")
+    from arquivo import salvar_ativos
+    id_ativo = ler_opcao("Digite o ID do ativo: ", 1, 9999)
+
+    for ativo in ativos:
+        if ativo.id == id_ativo:
+            if len(ativo.vulnerabilidades) == 0:
+                print("\nEste ativo não possui vulnerabilidades registradas.")
+                return
+            
+            # Mostra as vulnerabilidades numeradas
+            print(f"\nVulnerabilidades encontradas no ativo {ativo.nome}:")
+            for i, vulnerabilidade in enumerate(ativo.vulnerabilidades, start=1):
+                print(f"[{i}] {vulnerabilidade.descricao} (Severidade: {vulnerabilidade.severidade})")
+            
+            # Pede o índice para deletar
+            indice = ler_opcao("\nDigite o número da vulnerabilidade que deseja apagar (ou 0 para cancelar): ", 0, len(ativo.vulnerabilidades))
+            
+            if indice == 0:
+                print("\nOperação cancelada.")
+                return
+            
+            # Remove usando .pop() - subtraindo 1 pois o Python começa a contar do zero
+            vuln_removida = ativo.vulnerabilidades.pop(indice - 1)
+            salvar_ativos(ativos)
+            print(f"\nVulnerabilidade '{vuln_removida.descricao}' deletada com sucesso!")
+            return
+
+    print("\nAtivo não encontrado.")

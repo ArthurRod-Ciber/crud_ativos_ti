@@ -1,7 +1,7 @@
 from enums import TipoAtivo, Severidade,  Status
 from utilidades import ler_opcao
 from exibicao import exibir_menu
-from equipamento import cadastrar, deletar, atualizar_ativo, buscar
+from equipamento import cadastrar, deletar, atualizar_ativo, buscar, listar_ativos
 from vulnerabilidade import gerenciar_vulnerabilidades
 from arquivo import carregar_ativos
  
@@ -9,9 +9,10 @@ opcao = 0
 ativos = carregar_ativos()
 print(ativos)
 
-while opcao != 6:
+
+while opcao != 7:
     exibir_menu()
-    opcao = ler_opcao("O que deseja realizar? ", 1, 6)
+    opcao = ler_opcao("O que deseja realizar? ", 1, 7)
 
     if opcao == 1:
         cadastrar(ativos) #função para realizar o cadastro de um ativo, nela é gerado um id usando uma função que garante que o numero de identificação do ativo seja unico e exatamente o proximo numero na sequencia
@@ -20,6 +21,9 @@ while opcao != 6:
     elif opcao == 3:
         atualizar_ativo(ativos) #abre a opção de atualizar cada um dos campos do ativo, já atualizando diretamente no .json
     elif opcao == 4:
-        deletar(ativos) #funcao para fazer a remoção de um ativo diretamente no arquivo.json
+        listar_ativos(ativos)
     elif opcao == 5:
+        deletar(ativos) #funcao para fazer a remoção de um ativo diretamente no arquivo.json
+    elif opcao == 6:
         gerenciar_vulnerabilidades(ativos) #funcao que abre o submenu para gerenciar vulnerabilidades e todas as funcoes sobre as vulnerabilidades, como cadastrar, listar etc
+    
