@@ -79,7 +79,7 @@ def listar_vulnerabilidades(ativos):
 # funcao para gerenciar vulnerabilidades
 def gerenciar_vulnerabilidades(ativos):
     opcao_vul = 0
-    while opcao_vul != 3:
+    while opcao_vul != 4:
         exibir_menu_vulnerabilidades()
         opcao_vul = ler_opcao("Digite a opção que deseja realizar: ", 1, 4)
         if opcao_vul == 1:
@@ -88,6 +88,8 @@ def gerenciar_vulnerabilidades(ativos):
             listar_vulnerabilidades(ativos)
         elif opcao_vul == 3:
             deletar_vulnerabilidade(ativos)
+        elif opcao_vul == 4:
+            break
 
 #funcao para deletar vulnerabilidades
 def deletar_vulnerabilidade(ativos):

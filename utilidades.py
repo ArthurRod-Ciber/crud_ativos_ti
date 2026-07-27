@@ -14,9 +14,18 @@ def ler_opcao(mensagem, minimo, maximo):
             input("Pressione Enter para continuar")
 
 #funcao para ler estritamente textos
+# funcao para ler estritamente textos (sem ser apenas números)
 def ler_textos(mensagem):
-    while True:
-        valor = input(mensagem)
-        if valor.strip() != "":
-            return valor
-        print("\nCampo não pode ser vazio, tente novamente!\n")
+  while True:
+    valor = input(mensagem).strip()
+
+    if not valor:
+      print("\nCampo não pode ser vazio, tente novamente!\n")
+      continue
+
+    if valor.isdigit():
+      print("\nO campo não pode conter apenas números, tente novamente!\n")
+      continue
+
+    return valor
+
